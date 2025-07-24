@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: estoque-backend
+    runtime: docker
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn main:app --workers 2 --worker-class gthread --threads 2 --bind 0.0.0.0:5000"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: estoque-db
+          property: connectionString
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+databases:
+  - name: estoque-db
+    databaseName: estoque
+    user: estoque_user
+    plan: free
